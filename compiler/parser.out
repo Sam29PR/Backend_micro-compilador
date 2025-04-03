@@ -1,0 +1,655 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> statement_list
+Rule 2     statement_list -> statement ENDLINE statement_list
+Rule 3     statement_list -> statement ENDLINE
+Rule 4     statement -> statement_write
+Rule 5     statement -> statement_assign
+Rule 6     statement -> statement_capture
+Rule 7     statement -> statement_if
+Rule 8     statement_write -> WRITE LPAREN STRING COMMA VARIABLE RPAREN
+Rule 9     statement_assign -> VARIABLE EQUALS expression
+Rule 10    statement_capture -> CAPTURE LPAREN VARIABLE RPAREN
+Rule 11    statement_if -> IF LPAREN condition RPAREN THEN statement_list ENDIF
+Rule 12    expression -> expression PLUS expression
+Rule 13    expression -> expression MINUS expression
+Rule 14    expression -> expression TIMES expression
+Rule 15    expression -> expression DIVIDE expression
+Rule 16    expression -> NUMBER
+Rule 17    expression -> VARIABLE
+Rule 18    condition -> expression REL_OP expression
+Rule 19    condition -> condition LOG_OP condition
+
+Terminals, with rules where they appear
+
+CAPTURE              : 10
+COMMA                : 8
+DIVIDE               : 15
+ENDIF                : 11
+ENDLINE              : 2 3
+EQUALS               : 9
+IF                   : 11
+LOG_OP               : 19
+LPAREN               : 8 10 11
+MINUS                : 13
+NUMBER               : 16
+PLUS                 : 12
+REL_OP               : 18
+RPAREN               : 8 10 11
+STRING               : 8
+THEN                 : 11
+TIMES                : 14
+VARIABLE             : 8 9 10 17
+WRITE                : 8
+error                : 
+
+Nonterminals, with rules where they appear
+
+condition            : 11 19 19
+expression           : 9 12 12 13 13 14 14 15 15 18 18
+program              : 0
+statement            : 2 3
+statement_assign     : 5
+statement_capture    : 6
+statement_if         : 7
+statement_list       : 1 2 11
+statement_write      : 4
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . statement_list
+    (2) statement_list -> . statement ENDLINE statement_list
+    (3) statement_list -> . statement ENDLINE
+    (4) statement -> . statement_write
+    (5) statement -> . statement_assign
+    (6) statement -> . statement_capture
+    (7) statement -> . statement_if
+    (8) statement_write -> . WRITE LPAREN STRING COMMA VARIABLE RPAREN
+    (9) statement_assign -> . VARIABLE EQUALS expression
+    (10) statement_capture -> . CAPTURE LPAREN VARIABLE RPAREN
+    (11) statement_if -> . IF LPAREN condition RPAREN THEN statement_list ENDIF
+
+    WRITE           shift and go to state 8
+    VARIABLE        shift and go to state 9
+    CAPTURE         shift and go to state 10
+    IF              shift and go to state 11
+
+    program                        shift and go to state 1
+    statement_list                 shift and go to state 2
+    statement                      shift and go to state 3
+    statement_write                shift and go to state 4
+    statement_assign               shift and go to state 5
+    statement_capture              shift and go to state 6
+    statement_if                   shift and go to state 7
+
+state 1
+
+    (0) S' -> program .
+
+
+
+state 2
+
+    (1) program -> statement_list .
+
+    $end            reduce using rule 1 (program -> statement_list .)
+
+
+state 3
+
+    (2) statement_list -> statement . ENDLINE statement_list
+    (3) statement_list -> statement . ENDLINE
+
+    ENDLINE         shift and go to state 12
+
+
+state 4
+
+    (4) statement -> statement_write .
+
+    ENDLINE         reduce using rule 4 (statement -> statement_write .)
+
+
+state 5
+
+    (5) statement -> statement_assign .
+
+    ENDLINE         reduce using rule 5 (statement -> statement_assign .)
+
+
+state 6
+
+    (6) statement -> statement_capture .
+
+    ENDLINE         reduce using rule 6 (statement -> statement_capture .)
+
+
+state 7
+
+    (7) statement -> statement_if .
+
+    ENDLINE         reduce using rule 7 (statement -> statement_if .)
+
+
+state 8
+
+    (8) statement_write -> WRITE . LPAREN STRING COMMA VARIABLE RPAREN
+
+    LPAREN          shift and go to state 13
+
+
+state 9
+
+    (9) statement_assign -> VARIABLE . EQUALS expression
+
+    EQUALS          shift and go to state 14
+
+
+state 10
+
+    (10) statement_capture -> CAPTURE . LPAREN VARIABLE RPAREN
+
+    LPAREN          shift and go to state 15
+
+
+state 11
+
+    (11) statement_if -> IF . LPAREN condition RPAREN THEN statement_list ENDIF
+
+    LPAREN          shift and go to state 16
+
+
+state 12
+
+    (2) statement_list -> statement ENDLINE . statement_list
+    (3) statement_list -> statement ENDLINE .
+    (2) statement_list -> . statement ENDLINE statement_list
+    (3) statement_list -> . statement ENDLINE
+    (4) statement -> . statement_write
+    (5) statement -> . statement_assign
+    (6) statement -> . statement_capture
+    (7) statement -> . statement_if
+    (8) statement_write -> . WRITE LPAREN STRING COMMA VARIABLE RPAREN
+    (9) statement_assign -> . VARIABLE EQUALS expression
+    (10) statement_capture -> . CAPTURE LPAREN VARIABLE RPAREN
+    (11) statement_if -> . IF LPAREN condition RPAREN THEN statement_list ENDIF
+
+    $end            reduce using rule 3 (statement_list -> statement ENDLINE .)
+    ENDIF           reduce using rule 3 (statement_list -> statement ENDLINE .)
+    WRITE           shift and go to state 8
+    VARIABLE        shift and go to state 9
+    CAPTURE         shift and go to state 10
+    IF              shift and go to state 11
+
+    statement                      shift and go to state 3
+    statement_list                 shift and go to state 17
+    statement_write                shift and go to state 4
+    statement_assign               shift and go to state 5
+    statement_capture              shift and go to state 6
+    statement_if                   shift and go to state 7
+
+state 13
+
+    (8) statement_write -> WRITE LPAREN . STRING COMMA VARIABLE RPAREN
+
+    STRING          shift and go to state 18
+
+
+state 14
+
+    (9) statement_assign -> VARIABLE EQUALS . expression
+    (12) expression -> . expression PLUS expression
+    (13) expression -> . expression MINUS expression
+    (14) expression -> . expression TIMES expression
+    (15) expression -> . expression DIVIDE expression
+    (16) expression -> . NUMBER
+    (17) expression -> . VARIABLE
+
+    NUMBER          shift and go to state 21
+    VARIABLE        shift and go to state 19
+
+    expression                     shift and go to state 20
+
+state 15
+
+    (10) statement_capture -> CAPTURE LPAREN . VARIABLE RPAREN
+
+    VARIABLE        shift and go to state 22
+
+
+state 16
+
+    (11) statement_if -> IF LPAREN . condition RPAREN THEN statement_list ENDIF
+    (18) condition -> . expression REL_OP expression
+    (19) condition -> . condition LOG_OP condition
+    (12) expression -> . expression PLUS expression
+    (13) expression -> . expression MINUS expression
+    (14) expression -> . expression TIMES expression
+    (15) expression -> . expression DIVIDE expression
+    (16) expression -> . NUMBER
+    (17) expression -> . VARIABLE
+
+    NUMBER          shift and go to state 21
+    VARIABLE        shift and go to state 19
+
+    condition                      shift and go to state 23
+    expression                     shift and go to state 24
+
+state 17
+
+    (2) statement_list -> statement ENDLINE statement_list .
+
+    $end            reduce using rule 2 (statement_list -> statement ENDLINE statement_list .)
+    ENDIF           reduce using rule 2 (statement_list -> statement ENDLINE statement_list .)
+
+
+state 18
+
+    (8) statement_write -> WRITE LPAREN STRING . COMMA VARIABLE RPAREN
+
+    COMMA           shift and go to state 25
+
+
+state 19
+
+    (17) expression -> VARIABLE .
+
+    PLUS            reduce using rule 17 (expression -> VARIABLE .)
+    MINUS           reduce using rule 17 (expression -> VARIABLE .)
+    TIMES           reduce using rule 17 (expression -> VARIABLE .)
+    DIVIDE          reduce using rule 17 (expression -> VARIABLE .)
+    ENDLINE         reduce using rule 17 (expression -> VARIABLE .)
+    REL_OP          reduce using rule 17 (expression -> VARIABLE .)
+    RPAREN          reduce using rule 17 (expression -> VARIABLE .)
+    LOG_OP          reduce using rule 17 (expression -> VARIABLE .)
+
+
+state 20
+
+    (9) statement_assign -> VARIABLE EQUALS expression .
+    (12) expression -> expression . PLUS expression
+    (13) expression -> expression . MINUS expression
+    (14) expression -> expression . TIMES expression
+    (15) expression -> expression . DIVIDE expression
+
+    ENDLINE         reduce using rule 9 (statement_assign -> VARIABLE EQUALS expression .)
+    PLUS            shift and go to state 26
+    MINUS           shift and go to state 27
+    TIMES           shift and go to state 28
+    DIVIDE          shift and go to state 29
+
+
+state 21
+
+    (16) expression -> NUMBER .
+
+    PLUS            reduce using rule 16 (expression -> NUMBER .)
+    MINUS           reduce using rule 16 (expression -> NUMBER .)
+    TIMES           reduce using rule 16 (expression -> NUMBER .)
+    DIVIDE          reduce using rule 16 (expression -> NUMBER .)
+    ENDLINE         reduce using rule 16 (expression -> NUMBER .)
+    REL_OP          reduce using rule 16 (expression -> NUMBER .)
+    RPAREN          reduce using rule 16 (expression -> NUMBER .)
+    LOG_OP          reduce using rule 16 (expression -> NUMBER .)
+
+
+state 22
+
+    (10) statement_capture -> CAPTURE LPAREN VARIABLE . RPAREN
+
+    RPAREN          shift and go to state 30
+
+
+state 23
+
+    (11) statement_if -> IF LPAREN condition . RPAREN THEN statement_list ENDIF
+    (19) condition -> condition . LOG_OP condition
+
+    RPAREN          shift and go to state 31
+    LOG_OP          shift and go to state 32
+
+
+state 24
+
+    (18) condition -> expression . REL_OP expression
+    (12) expression -> expression . PLUS expression
+    (13) expression -> expression . MINUS expression
+    (14) expression -> expression . TIMES expression
+    (15) expression -> expression . DIVIDE expression
+
+    REL_OP          shift and go to state 33
+    PLUS            shift and go to state 26
+    MINUS           shift and go to state 27
+    TIMES           shift and go to state 28
+    DIVIDE          shift and go to state 29
+
+
+state 25
+
+    (8) statement_write -> WRITE LPAREN STRING COMMA . VARIABLE RPAREN
+
+    VARIABLE        shift and go to state 34
+
+
+state 26
+
+    (12) expression -> expression PLUS . expression
+    (12) expression -> . expression PLUS expression
+    (13) expression -> . expression MINUS expression
+    (14) expression -> . expression TIMES expression
+    (15) expression -> . expression DIVIDE expression
+    (16) expression -> . NUMBER
+    (17) expression -> . VARIABLE
+
+    NUMBER          shift and go to state 21
+    VARIABLE        shift and go to state 19
+
+    expression                     shift and go to state 35
+
+state 27
+
+    (13) expression -> expression MINUS . expression
+    (12) expression -> . expression PLUS expression
+    (13) expression -> . expression MINUS expression
+    (14) expression -> . expression TIMES expression
+    (15) expression -> . expression DIVIDE expression
+    (16) expression -> . NUMBER
+    (17) expression -> . VARIABLE
+
+    NUMBER          shift and go to state 21
+    VARIABLE        shift and go to state 19
+
+    expression                     shift and go to state 36
+
+state 28
+
+    (14) expression -> expression TIMES . expression
+    (12) expression -> . expression PLUS expression
+    (13) expression -> . expression MINUS expression
+    (14) expression -> . expression TIMES expression
+    (15) expression -> . expression DIVIDE expression
+    (16) expression -> . NUMBER
+    (17) expression -> . VARIABLE
+
+    NUMBER          shift and go to state 21
+    VARIABLE        shift and go to state 19
+
+    expression                     shift and go to state 37
+
+state 29
+
+    (15) expression -> expression DIVIDE . expression
+    (12) expression -> . expression PLUS expression
+    (13) expression -> . expression MINUS expression
+    (14) expression -> . expression TIMES expression
+    (15) expression -> . expression DIVIDE expression
+    (16) expression -> . NUMBER
+    (17) expression -> . VARIABLE
+
+    NUMBER          shift and go to state 21
+    VARIABLE        shift and go to state 19
+
+    expression                     shift and go to state 38
+
+state 30
+
+    (10) statement_capture -> CAPTURE LPAREN VARIABLE RPAREN .
+
+    ENDLINE         reduce using rule 10 (statement_capture -> CAPTURE LPAREN VARIABLE RPAREN .)
+
+
+state 31
+
+    (11) statement_if -> IF LPAREN condition RPAREN . THEN statement_list ENDIF
+
+    THEN            shift and go to state 39
+
+
+state 32
+
+    (19) condition -> condition LOG_OP . condition
+    (18) condition -> . expression REL_OP expression
+    (19) condition -> . condition LOG_OP condition
+    (12) expression -> . expression PLUS expression
+    (13) expression -> . expression MINUS expression
+    (14) expression -> . expression TIMES expression
+    (15) expression -> . expression DIVIDE expression
+    (16) expression -> . NUMBER
+    (17) expression -> . VARIABLE
+
+    NUMBER          shift and go to state 21
+    VARIABLE        shift and go to state 19
+
+    condition                      shift and go to state 40
+    expression                     shift and go to state 24
+
+state 33
+
+    (18) condition -> expression REL_OP . expression
+    (12) expression -> . expression PLUS expression
+    (13) expression -> . expression MINUS expression
+    (14) expression -> . expression TIMES expression
+    (15) expression -> . expression DIVIDE expression
+    (16) expression -> . NUMBER
+    (17) expression -> . VARIABLE
+
+    NUMBER          shift and go to state 21
+    VARIABLE        shift and go to state 19
+
+    expression                     shift and go to state 41
+
+state 34
+
+    (8) statement_write -> WRITE LPAREN STRING COMMA VARIABLE . RPAREN
+
+    RPAREN          shift and go to state 42
+
+
+state 35
+
+    (12) expression -> expression PLUS expression .
+    (12) expression -> expression . PLUS expression
+    (13) expression -> expression . MINUS expression
+    (14) expression -> expression . TIMES expression
+    (15) expression -> expression . DIVIDE expression
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+    ENDLINE         reduce using rule 12 (expression -> expression PLUS expression .)
+    REL_OP          reduce using rule 12 (expression -> expression PLUS expression .)
+    RPAREN          reduce using rule 12 (expression -> expression PLUS expression .)
+    LOG_OP          reduce using rule 12 (expression -> expression PLUS expression .)
+    PLUS            shift and go to state 26
+    MINUS           shift and go to state 27
+    TIMES           shift and go to state 28
+    DIVIDE          shift and go to state 29
+
+  ! PLUS            [ reduce using rule 12 (expression -> expression PLUS expression .) ]
+  ! MINUS           [ reduce using rule 12 (expression -> expression PLUS expression .) ]
+  ! TIMES           [ reduce using rule 12 (expression -> expression PLUS expression .) ]
+  ! DIVIDE          [ reduce using rule 12 (expression -> expression PLUS expression .) ]
+
+
+state 36
+
+    (13) expression -> expression MINUS expression .
+    (12) expression -> expression . PLUS expression
+    (13) expression -> expression . MINUS expression
+    (14) expression -> expression . TIMES expression
+    (15) expression -> expression . DIVIDE expression
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+    ENDLINE         reduce using rule 13 (expression -> expression MINUS expression .)
+    REL_OP          reduce using rule 13 (expression -> expression MINUS expression .)
+    RPAREN          reduce using rule 13 (expression -> expression MINUS expression .)
+    LOG_OP          reduce using rule 13 (expression -> expression MINUS expression .)
+    PLUS            shift and go to state 26
+    MINUS           shift and go to state 27
+    TIMES           shift and go to state 28
+    DIVIDE          shift and go to state 29
+
+  ! PLUS            [ reduce using rule 13 (expression -> expression MINUS expression .) ]
+  ! MINUS           [ reduce using rule 13 (expression -> expression MINUS expression .) ]
+  ! TIMES           [ reduce using rule 13 (expression -> expression MINUS expression .) ]
+  ! DIVIDE          [ reduce using rule 13 (expression -> expression MINUS expression .) ]
+
+
+state 37
+
+    (14) expression -> expression TIMES expression .
+    (12) expression -> expression . PLUS expression
+    (13) expression -> expression . MINUS expression
+    (14) expression -> expression . TIMES expression
+    (15) expression -> expression . DIVIDE expression
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+    ENDLINE         reduce using rule 14 (expression -> expression TIMES expression .)
+    REL_OP          reduce using rule 14 (expression -> expression TIMES expression .)
+    RPAREN          reduce using rule 14 (expression -> expression TIMES expression .)
+    LOG_OP          reduce using rule 14 (expression -> expression TIMES expression .)
+    PLUS            shift and go to state 26
+    MINUS           shift and go to state 27
+    TIMES           shift and go to state 28
+    DIVIDE          shift and go to state 29
+
+  ! PLUS            [ reduce using rule 14 (expression -> expression TIMES expression .) ]
+  ! MINUS           [ reduce using rule 14 (expression -> expression TIMES expression .) ]
+  ! TIMES           [ reduce using rule 14 (expression -> expression TIMES expression .) ]
+  ! DIVIDE          [ reduce using rule 14 (expression -> expression TIMES expression .) ]
+
+
+state 38
+
+    (15) expression -> expression DIVIDE expression .
+    (12) expression -> expression . PLUS expression
+    (13) expression -> expression . MINUS expression
+    (14) expression -> expression . TIMES expression
+    (15) expression -> expression . DIVIDE expression
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+    ENDLINE         reduce using rule 15 (expression -> expression DIVIDE expression .)
+    REL_OP          reduce using rule 15 (expression -> expression DIVIDE expression .)
+    RPAREN          reduce using rule 15 (expression -> expression DIVIDE expression .)
+    LOG_OP          reduce using rule 15 (expression -> expression DIVIDE expression .)
+    PLUS            shift and go to state 26
+    MINUS           shift and go to state 27
+    TIMES           shift and go to state 28
+    DIVIDE          shift and go to state 29
+
+  ! PLUS            [ reduce using rule 15 (expression -> expression DIVIDE expression .) ]
+  ! MINUS           [ reduce using rule 15 (expression -> expression DIVIDE expression .) ]
+  ! TIMES           [ reduce using rule 15 (expression -> expression DIVIDE expression .) ]
+  ! DIVIDE          [ reduce using rule 15 (expression -> expression DIVIDE expression .) ]
+
+
+state 39
+
+    (11) statement_if -> IF LPAREN condition RPAREN THEN . statement_list ENDIF
+    (2) statement_list -> . statement ENDLINE statement_list
+    (3) statement_list -> . statement ENDLINE
+    (4) statement -> . statement_write
+    (5) statement -> . statement_assign
+    (6) statement -> . statement_capture
+    (7) statement -> . statement_if
+    (8) statement_write -> . WRITE LPAREN STRING COMMA VARIABLE RPAREN
+    (9) statement_assign -> . VARIABLE EQUALS expression
+    (10) statement_capture -> . CAPTURE LPAREN VARIABLE RPAREN
+    (11) statement_if -> . IF LPAREN condition RPAREN THEN statement_list ENDIF
+
+    WRITE           shift and go to state 8
+    VARIABLE        shift and go to state 9
+    CAPTURE         shift and go to state 10
+    IF              shift and go to state 11
+
+    statement_list                 shift and go to state 43
+    statement                      shift and go to state 3
+    statement_write                shift and go to state 4
+    statement_assign               shift and go to state 5
+    statement_capture              shift and go to state 6
+    statement_if                   shift and go to state 7
+
+state 40
+
+    (19) condition -> condition LOG_OP condition .
+    (19) condition -> condition . LOG_OP condition
+
+  ! shift/reduce conflict for LOG_OP resolved as shift
+    RPAREN          reduce using rule 19 (condition -> condition LOG_OP condition .)
+    LOG_OP          shift and go to state 32
+
+  ! LOG_OP          [ reduce using rule 19 (condition -> condition LOG_OP condition .) ]
+
+
+state 41
+
+    (18) condition -> expression REL_OP expression .
+    (12) expression -> expression . PLUS expression
+    (13) expression -> expression . MINUS expression
+    (14) expression -> expression . TIMES expression
+    (15) expression -> expression . DIVIDE expression
+
+    RPAREN          reduce using rule 18 (condition -> expression REL_OP expression .)
+    LOG_OP          reduce using rule 18 (condition -> expression REL_OP expression .)
+    PLUS            shift and go to state 26
+    MINUS           shift and go to state 27
+    TIMES           shift and go to state 28
+    DIVIDE          shift and go to state 29
+
+
+state 42
+
+    (8) statement_write -> WRITE LPAREN STRING COMMA VARIABLE RPAREN .
+
+    ENDLINE         reduce using rule 8 (statement_write -> WRITE LPAREN STRING COMMA VARIABLE RPAREN .)
+
+
+state 43
+
+    (11) statement_if -> IF LPAREN condition RPAREN THEN statement_list . ENDIF
+
+    ENDIF           shift and go to state 44
+
+
+state 44
+
+    (11) statement_if -> IF LPAREN condition RPAREN THEN statement_list ENDIF .
+
+    ENDLINE         reduce using rule 11 (statement_if -> IF LPAREN condition RPAREN THEN statement_list ENDIF .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for PLUS in state 35 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 35 resolved as shift
+WARNING: shift/reduce conflict for TIMES in state 35 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 35 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 36 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 36 resolved as shift
+WARNING: shift/reduce conflict for TIMES in state 36 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 36 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 37 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 37 resolved as shift
+WARNING: shift/reduce conflict for TIMES in state 37 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 37 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 38 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 38 resolved as shift
+WARNING: shift/reduce conflict for TIMES in state 38 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 38 resolved as shift
+WARNING: shift/reduce conflict for LOG_OP in state 40 resolved as shift
