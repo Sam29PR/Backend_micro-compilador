@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'CAPTURE COMMA DIVIDE ENDIF ENDLINE EQUALS IF LOG_OP LPAREN MINUS NUMBER PLUS REL_OP RPAREN STRING THEN TIMES VARIABLE WRITEprogram : statement_liststatement_list : statement ENDLINE statement_list\n                      | statement ENDLINEstatement : statement_write\n                 | statement_assign\n                 | statement_capture\n                 | statement_ifstatement_write : WRITE LPAREN STRING COMMA VARIABLE RPARENstatement_assign : VARIABLE EQUALS expressionstatement_capture : CAPTURE LPAREN VARIABLE RPARENstatement_if : IF LPAREN condition RPAREN THEN statement_list ENDIFexpression : expression PLUS expression\n                  | expression MINUS expression\n                  | expression TIMES expression\n                  | expression DIVIDE expressionexpression : NUMBERexpression : VARIABLEcondition : expression REL_OP expression\n                 | condition LOG_OP condition'
+_lr_signature = 'CAPTURE COMMA DIVIDE ENDIF ENDLINE EQUALS IF LOG_OP LPAREN MINUS NUMBER PLUS REL_OP RPAREN STRING THEN TIMES VARIABLE WRITEprogram : statement_liststatement_list : statement_list statement\n                      | statementstatement : statement_assign\n                 | statement_write\n                 | statement_capture\n                 | statement_ifstatement_assign : VARIABLE EQUALS expression ENDLINEstatement_write : WRITE LPAREN STRING COMMA expression RPAREN ENDLINEstatement_capture : CAPTURE LPAREN VARIABLE RPAREN ENDLINEstatement_if : IF LPAREN condition RPAREN THEN statement_list ENDIFexpression : expression PLUS expression\n                  | expression MINUS expression\n                  | expression TIMES expression\n                  | expression DIVIDE expressionexpression : LPAREN expression RPARENexpression : NUMBERexpression : VARIABLEcondition : expression REL_OP expressioncondition : condition LOG_OP conditioncondition : LOG_OP conditioncondition : LPAREN condition RPAREN'
     
-_lr_action_items = {'WRITE':([0,12,39,],[8,8,8,]),'VARIABLE':([0,12,14,15,16,25,26,27,28,29,32,33,39,],[9,9,19,22,19,34,19,19,19,19,19,19,9,]),'CAPTURE':([0,12,39,],[10,10,10,]),'IF':([0,12,39,],[11,11,11,]),'$end':([1,2,12,17,],[0,-1,-3,-2,]),'ENDLINE':([3,4,5,6,7,19,20,21,30,35,36,37,38,42,44,],[12,-4,-5,-6,-7,-17,-9,-16,-10,-12,-13,-14,-15,-8,-11,]),'LPAREN':([8,10,11,],[13,15,16,]),'EQUALS':([9,],[14,]),'ENDIF':([12,17,43,],[-3,-2,44,]),'STRING':([13,],[18,]),'NUMBER':([14,16,26,27,28,29,32,33,],[21,21,21,21,21,21,21,21,]),'COMMA':([18,],[25,]),'PLUS':([19,20,21,24,35,36,37,38,41,],[-17,26,-16,26,26,26,26,26,26,]),'MINUS':([19,20,21,24,35,36,37,38,41,],[-17,27,-16,27,27,27,27,27,27,]),'TIMES':([19,20,21,24,35,36,37,38,41,],[-17,28,-16,28,28,28,28,28,28,]),'DIVIDE':([19,20,21,24,35,36,37,38,41,],[-17,29,-16,29,29,29,29,29,29,]),'REL_OP':([19,21,24,35,36,37,38,],[-17,-16,33,-12,-13,-14,-15,]),'RPAREN':([19,21,22,23,34,35,36,37,38,40,41,],[-17,-16,30,31,42,-12,-13,-14,-15,-19,-18,]),'LOG_OP':([19,21,23,35,36,37,38,40,41,],[-17,-16,32,-12,-13,-14,-15,32,-18,]),'THEN':([31,],[39,]),}
+_lr_action_items = {'VARIABLE':([0,2,3,4,5,6,7,12,13,15,16,19,23,26,27,28,29,30,31,33,38,39,47,49,53,54,55,],[8,8,-3,-4,-5,-6,-7,-2,17,22,17,17,17,17,-8,17,17,17,17,17,17,17,-10,8,8,-9,-11,]),'WRITE':([0,2,3,4,5,6,7,12,27,47,49,53,54,55,],[9,9,-3,-4,-5,-6,-7,-2,-8,-10,9,9,-9,-11,]),'CAPTURE':([0,2,3,4,5,6,7,12,27,47,49,53,54,55,],[10,10,-3,-4,-5,-6,-7,-2,-8,-10,10,10,-9,-11,]),'IF':([0,2,3,4,5,6,7,12,27,47,49,53,54,55,],[11,11,-3,-4,-5,-6,-7,-2,-8,-10,11,11,-9,-11,]),'$end':([1,2,3,4,5,6,7,12,27,47,54,55,],[0,-1,-3,-4,-5,-6,-7,-2,-8,-10,-9,-11,]),'ENDIF':([3,4,5,6,7,12,27,47,53,54,55,],[-3,-4,-5,-6,-7,-2,-8,-10,55,-9,-11,]),'EQUALS':([8,],[13,]),'LPAREN':([9,10,11,13,16,19,23,26,28,29,30,31,33,38,39,],[14,15,16,19,23,19,23,23,19,19,19,19,19,23,19,]),'NUMBER':([13,16,19,23,26,28,29,30,31,33,38,39,],[20,20,20,20,20,20,20,20,20,20,20,20,]),'STRING':([14,],[21,]),'LOG_OP':([16,17,20,23,24,26,35,38,40,41,42,43,44,45,48,50,51,],[26,-18,-17,26,38,26,38,26,38,-12,-13,-14,-15,-16,-22,38,-19,]),'ENDLINE':([17,18,20,34,41,42,43,44,45,52,],[-18,27,-17,47,-12,-13,-14,-15,-16,54,]),'PLUS':([17,18,20,25,32,36,41,42,43,44,45,46,51,],[-18,28,-17,28,28,28,28,28,28,28,-16,28,28,]),'MINUS':([17,18,20,25,32,36,41,42,43,44,45,46,51,],[-18,29,-17,29,29,29,29,29,29,29,-16,29,29,]),'TIMES':([17,18,20,25,32,36,41,42,43,44,45,46,51,],[-18,30,-17,30,30,30,30,30,30,30,-16,30,30,]),'DIVIDE':([17,18,20,25,32,36,41,42,43,44,45,46,51,],[-18,31,-17,31,31,31,31,31,31,31,-16,31,31,]),'REL_OP':([17,20,25,36,41,42,43,44,45,],[-18,-17,39,39,-12,-13,-14,-15,-16,]),'RPAREN':([17,20,22,24,32,35,36,40,41,42,43,44,45,46,48,50,51,],[-18,-17,34,37,45,48,45,-21,-12,-13,-14,-15,-16,52,-22,-20,-19,]),'COMMA':([21,],[33,]),'THEN':([37,],[49,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'program':([0,],[1,]),'statement_list':([0,12,39,],[2,17,43,]),'statement':([0,12,39,],[3,3,3,]),'statement_write':([0,12,39,],[4,4,4,]),'statement_assign':([0,12,39,],[5,5,5,]),'statement_capture':([0,12,39,],[6,6,6,]),'statement_if':([0,12,39,],[7,7,7,]),'expression':([14,16,26,27,28,29,32,33,],[20,24,35,36,37,38,24,41,]),'condition':([16,32,],[23,40,]),}
+_lr_goto_items = {'program':([0,],[1,]),'statement_list':([0,49,],[2,53,]),'statement':([0,2,49,53,],[3,12,3,12,]),'statement_assign':([0,2,49,53,],[4,4,4,4,]),'statement_write':([0,2,49,53,],[5,5,5,5,]),'statement_capture':([0,2,49,53,],[6,6,6,6,]),'statement_if':([0,2,49,53,],[7,7,7,7,]),'expression':([13,16,19,23,26,28,29,30,31,33,38,39,],[18,25,32,36,25,41,42,43,44,46,25,51,]),'condition':([16,23,26,38,],[24,35,40,50,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,23 +27,26 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> program","S'",1,None,None,None),
-  ('program -> statement_list','program',1,'p_program','parser.py',8),
-  ('statement_list -> statement ENDLINE statement_list','statement_list',3,'p_statement_list','parser.py',13),
-  ('statement_list -> statement ENDLINE','statement_list',2,'p_statement_list','parser.py',14),
-  ('statement -> statement_write','statement',1,'p_statement','parser.py',22),
+  ('program -> statement_list','program',1,'p_program','parser.py',9),
+  ('statement_list -> statement_list statement','statement_list',2,'p_statement_list','parser.py',14),
+  ('statement_list -> statement','statement_list',1,'p_statement_list','parser.py',15),
   ('statement -> statement_assign','statement',1,'p_statement','parser.py',23),
-  ('statement -> statement_capture','statement',1,'p_statement','parser.py',24),
-  ('statement -> statement_if','statement',1,'p_statement','parser.py',25),
-  ('statement_write -> WRITE LPAREN STRING COMMA VARIABLE RPAREN','statement_write',6,'p_statement_write','parser.py',30),
-  ('statement_assign -> VARIABLE EQUALS expression','statement_assign',3,'p_statement_assign','parser.py',35),
-  ('statement_capture -> CAPTURE LPAREN VARIABLE RPAREN','statement_capture',4,'p_statement_capture','parser.py',40),
-  ('statement_if -> IF LPAREN condition RPAREN THEN statement_list ENDIF','statement_if',7,'p_statement_if','parser.py',45),
-  ('expression -> expression PLUS expression','expression',3,'p_expression_binop','parser.py',50),
-  ('expression -> expression MINUS expression','expression',3,'p_expression_binop','parser.py',51),
-  ('expression -> expression TIMES expression','expression',3,'p_expression_binop','parser.py',52),
-  ('expression -> expression DIVIDE expression','expression',3,'p_expression_binop','parser.py',53),
-  ('expression -> NUMBER','expression',1,'p_expression_number','parser.py',57),
-  ('expression -> VARIABLE','expression',1,'p_expression_variable','parser.py',61),
-  ('condition -> expression REL_OP expression','condition',3,'p_condition','parser.py',66),
-  ('condition -> condition LOG_OP condition','condition',3,'p_condition','parser.py',67),
+  ('statement -> statement_write','statement',1,'p_statement','parser.py',24),
+  ('statement -> statement_capture','statement',1,'p_statement','parser.py',25),
+  ('statement -> statement_if','statement',1,'p_statement','parser.py',26),
+  ('statement_assign -> VARIABLE EQUALS expression ENDLINE','statement_assign',4,'p_statement_assign','parser.py',31),
+  ('statement_write -> WRITE LPAREN STRING COMMA expression RPAREN ENDLINE','statement_write',7,'p_statement_write','parser.py',36),
+  ('statement_capture -> CAPTURE LPAREN VARIABLE RPAREN ENDLINE','statement_capture',5,'p_statement_capture','parser.py',41),
+  ('statement_if -> IF LPAREN condition RPAREN THEN statement_list ENDIF','statement_if',7,'p_statement_if','parser.py',46),
+  ('expression -> expression PLUS expression','expression',3,'p_expression_binop','parser.py',52),
+  ('expression -> expression MINUS expression','expression',3,'p_expression_binop','parser.py',53),
+  ('expression -> expression TIMES expression','expression',3,'p_expression_binop','parser.py',54),
+  ('expression -> expression DIVIDE expression','expression',3,'p_expression_binop','parser.py',55),
+  ('expression -> LPAREN expression RPAREN','expression',3,'p_expression_parens','parser.py',60),
+  ('expression -> NUMBER','expression',1,'p_expression_number','parser.py',65),
+  ('expression -> VARIABLE','expression',1,'p_expression_variable','parser.py',70),
+  ('condition -> expression REL_OP expression','condition',3,'p_condition_rel','parser.py',75),
+  ('condition -> condition LOG_OP condition','condition',3,'p_condition_logic','parser.py',80),
+  ('condition -> LOG_OP condition','condition',2,'p_condition_not','parser.py',85),
+  ('condition -> LPAREN condition RPAREN','condition',3,'p_condition_group','parser.py',90),
 ]

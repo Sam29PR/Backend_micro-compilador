@@ -1,7 +1,8 @@
 import ply.yacc as yacc
-from compiler.lexer import tokens  # Asegúrate de que esta importación es correcta
+from compiler.lexer import tokens
 
-# Reglas de gramática
+# Lista global para errores de sintaxis
+syntax_errors = []
 
 # Programa principal
 def p_program(p):
@@ -10,42 +11,43 @@ def p_program(p):
 
 # Lista de sentencias
 def p_statement_list(p):
-    '''statement_list : statement ENDLINE statement_list
-                      | statement ENDLINE'''
-    if len(p) == 4:
-        p[0] = [p[1]] + p[3]
+    '''statement_list : statement_list statement
+                      | statement'''
+    if len(p) == 3:
+        p[0] = p[1] + [p[2]]
     else:
         p[0] = [p[1]]
 
-# Sentencias posibles
+# Sentencia: assign, write, capture, if
 def p_statement(p):
-    '''statement : statement_write
-                 | statement_assign
+    '''statement : statement_assign
+                 | statement_write
                  | statement_capture
                  | statement_if'''
     p[0] = p[1]
 
-# Instrucción de salida
-def p_statement_write(p):
-    '''statement_write : WRITE LPAREN STRING COMMA VARIABLE RPAREN'''
-    p[0] = ('write', p[3], p[5])
-
-# Asignaciones
+# Asignación de variable (termina en ::)
 def p_statement_assign(p):
-    '''statement_assign : VARIABLE EQUALS expression'''
+    '''statement_assign : VARIABLE EQUALS expression ENDLINE'''
     p[0] = ('assign', p[1], p[3])
 
-# Captura de entrada
+# Escritura en pantalla
+def p_statement_write(p):
+    '''statement_write : WRITE LPAREN STRING COMMA expression RPAREN ENDLINE'''
+    p[0] = ('write', p[3], p[5])
+
+# Captura de dato
 def p_statement_capture(p):
-    '''statement_capture : CAPTURE LPAREN VARIABLE RPAREN'''
+    '''statement_capture : CAPTURE LPAREN VARIABLE RPAREN ENDLINE'''
     p[0] = ('capture', p[3])
 
-# Sentencias IF
+# Condicional if-then-end-if
 def p_statement_if(p):
     '''statement_if : IF LPAREN condition RPAREN THEN statement_list ENDIF'''
     p[0] = ('if', p[3], p[6])
 
-# Expresiones matemáticas
+# Expresiones aritméticas
+
 def p_expression_binop(p):
     '''expression : expression PLUS expression
                   | expression MINUS expression
@@ -53,43 +55,58 @@ def p_expression_binop(p):
                   | expression DIVIDE expression'''
     p[0] = (p[2], p[1], p[3])
 
+# Paréntesis en expresiones
+def p_expression_parens(p):
+    'expression : LPAREN expression RPAREN'
+    p[0] = p[2]
+
+# Números
 def p_expression_number(p):
-    '''expression : NUMBER'''
+    'expression : NUMBER'
     p[0] = ('num', p[1])
 
+# Variables
 def p_expression_variable(p):
-    '''expression : VARIABLE'''
+    'expression : VARIABLE'
     p[0] = ('var', p[1])
 
-# Condiciones lógicas
-def p_condition(p):
-    '''condition : expression REL_OP expression
-                 | condition LOG_OP condition'''
+# Condiciones relacionales
+def p_condition_rel(p):
+    'condition : expression REL_OP expression'
     p[0] = (p[2], p[1], p[3])
 
-# Manejo de errores sintácticos
-syntax_errors = []  # Lista para almacenar errores
+# Condiciones lógicas binaria
+def p_condition_logic(p):
+    'condition : condition LOG_OP condition'
+    p[0] = (p[2], p[1], p[3])
 
+# Negación
+def p_condition_not(p):
+    'condition : LOG_OP condition'
+    p[0] = ('not', p[2])
+
+# Paréntesis en condiciones
+def p_condition_group(p):
+    'condition : LPAREN condition RPAREN'
+    p[0] = p[2]
+
+# Manejo de errores sintácticos
 def p_error(p):
     if p:
-        error_msg = f"Error de sintaxis en '{p.value}' en la línea {p.lineno}"
+        msg = f"Error de sintaxis en '{p.value}' en la línea {p.lineno}"
     else:
-        error_msg = "Error de sintaxis: Token inesperado o código incompleto"
-    
-    syntax_errors.append(error_msg)  # Agregar error a la lista
+        msg = "Error de sintaxis: Token inesperado o código incompleto"
+    syntax_errors.append(msg)
 
-
-# Construir el parser
+# Construcción del parser
 parser = yacc.yacc()
 
-# Función para analizar código
+# Función principal de parseo
 def parse_code(code):
     global syntax_errors
     syntax_errors = []  # Limpiar errores previos
-
+    parser.start = 'program'
     result = parser.parse(code)
-
-    # 🚨 Si hay errores o el resultado es None, retorna errores
     if syntax_errors or result is None:
         return syntax_errors if syntax_errors else ["Error de sintaxis desconocido"]
     else:
