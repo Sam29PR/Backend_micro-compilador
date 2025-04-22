@@ -44,7 +44,7 @@ def t_NUMBER(t):
     return t
 
 def t_VARIABLE(t):
-    r'[a-zA-Z_][a-zA-Z_0-9]*'
+    r'end-if[a-zA-Z_][a-zA-Z_0-9]*'
     t.type = reserved.get(t.value, 'VARIABLE')
     return t
 
