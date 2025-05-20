@@ -1,12 +1,5 @@
 import ply.lex as lex
 
-# Lista de tokens
-tokens = [
-    'VARIABLE', 'NUMBER', 'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'EQUALS',
-    'LPAREN', 'RPAREN', 'STRING', 'COMMA', 'ENDLINE',
-    'WRITE', 'CAPTURE', 'IF', 'THEN', 'ENDIF', 'REL_OP', 'LOG_OP'
-]
-
 # Palabras reservadas
 reserved = {
     'write': 'WRITE',
@@ -14,10 +7,17 @@ reserved = {
     'if': 'IF',
     'then': 'THEN',
     'end-if': 'ENDIF',
-    'and': 'LOG_OP',
-    'or': 'LOG_OP',
-    'not': 'LOG_OP'
+    'and': 'AND',
+    'or': 'OR',
+    'not': 'NOT'
 }
+
+# Lista de tokens
+tokens = [
+    'VARIABLE', 'NUMBER', 'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'EQUALS',
+    'LPAREN', 'RPAREN', 'STRING', 'COMMA', 'DOUBLECOLON',
+    'REL_OP'
+] + list(reserved.values())
 
 # Tokens simples
 t_PLUS = r'\+'
@@ -28,10 +28,10 @@ t_EQUALS = r'='
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_COMMA = r','
-t_ENDLINE = r'::'
+t_DOUBLECOLON = r'::'
 
 def t_REL_OP(t):
-    r'<=|>=|<>|==|<|>'
+    r'<=|>=|<>|<|>'
     return t
 
 def t_STRING(t):
@@ -44,7 +44,7 @@ def t_NUMBER(t):
     return t
 
 def t_VARIABLE(t):
-    r'end-if[a-zA-Z_][a-zA-Z_0-9]*'
+    r'[a-zA-Z_][a-zA-Z_0-9]*'
     t.type = reserved.get(t.value, 'VARIABLE')
     return t
 
@@ -67,7 +67,6 @@ def get_tokens(code):
         tok = lexer.token()
         if not tok:
             break
-        print(tok)  # 👈 Agregado
+        print(tok)  # Para depuración
         tokens_list.append({'type': tok.type, 'value': tok.value})
     return tokens_list
-

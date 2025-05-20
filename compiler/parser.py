@@ -5,7 +5,7 @@ syntax_errors = []
 
 # Programa principal
 def p_program(p):
-    '''program : statement_list'''
+    'program : statement_list'
     p[0] = ('program', p[1])
 
 # Lista de sentencias
@@ -27,17 +27,17 @@ def p_statement(p):
 
 # Asignación de variable
 def p_statement_assign(p):
-    'statement_assign : VARIABLE EQUALS expression ENDLINE'
+    'statement_assign : VARIABLE EQUALS expression DOUBLECOLON'
     p[0] = ('assign', p[1], p[3])
 
 # Escritura en pantalla
 def p_statement_write(p):
-    'statement_write : WRITE LPAREN STRING COMMA expression RPAREN ENDLINE'
+    'statement_write : WRITE LPAREN STRING COMMA expression RPAREN DOUBLECOLON'
     p[0] = ('write', p[3], p[5])
 
 # Captura de entrada
 def p_statement_capture(p):
-    'statement_capture : CAPTURE LPAREN VARIABLE RPAREN ENDLINE'
+    'statement_capture : CAPTURE LPAREN VARIABLE RPAREN DOUBLECOLON'
     p[0] = ('capture', p[3])
 
 # Sentencia IF
@@ -71,13 +71,17 @@ def p_condition_rel(p):
     p[0] = (p[2], p[1], p[3])
 
 # Condiciones lógicas (and, or)
-def p_condition_logic(p):
-    'condition : condition LOG_OP condition'
-    p[0] = (p[2], p[1], p[3])
+def p_condition_logic_and(p):
+    'condition : condition AND condition'
+    p[0] = ('and', p[1], p[3])
 
-# Negación (not cond)
+def p_condition_logic_or(p):
+    'condition : condition OR condition'
+    p[0] = ('or', p[1], p[3])
+
+# Negación lógica
 def p_condition_not(p):
-    'condition : LOG_OP condition'
+    'condition : NOT condition'
     p[0] = ('not', p[2])
 
 # Agrupación con paréntesis en condiciones
@@ -94,13 +98,17 @@ def p_error(p):
         msg = "Error de sintaxis: Código incompleto o inesperado"
     syntax_errors.append(msg)
 
-parser = yacc.yacc()
+parser = yacc.yacc(debug=False, write_tables=False)
 
 def parse_code(code):
     global syntax_errors
     syntax_errors = []
-    parser.start = 'program'
+
+    if not code.strip():
+        return ["El código está vacío."]
+
     result = parser.parse(code)
+
     if syntax_errors or result is None:
         return syntax_errors if syntax_errors else ["Error de sintaxis desconocido"]
     else:
