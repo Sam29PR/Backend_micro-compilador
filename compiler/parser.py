@@ -32,8 +32,20 @@ def p_statement_assign(p):
 
 # Escritura en pantalla
 def p_statement_write(p):
-    'statement_write : WRITE LPAREN STRING COMMA expression RPAREN DOUBLECOLON'
-    p[0] = ('write', p[3], p[5])
+    '''statement_write : WRITE LPAREN write_args RPAREN DOUBLECOLON'''
+    p[0] = ('write',) + p[3]
+
+def p_statement_while(p):
+    'statement : WHILE LPAREN condition RPAREN statement_list ENDWHILE'
+    p[0] = ('while', p[3],p[5])
+
+def p_write_args(p):
+    '''write_args : write_args COMMA expression
+                  | expression'''
+    if len(p) == 4:
+        p[0] = p[1] + (p[3],)
+    else:
+        p[0] = (p[1],)
 
 # Captura de entrada
 def p_statement_capture(p):
@@ -60,6 +72,10 @@ def p_expression_parens(p):
 def p_expression_number(p):
     'expression : NUMBER'
     p[0] = ('num', p[1])
+
+def p_expression_string(p):
+    'expression : STRING'
+    p[0] = ('string', p[1])
 
 def p_expression_variable(p):
     'expression : VARIABLE'
@@ -92,11 +108,13 @@ def p_condition_group(p):
 # Manejo de errores
 def p_error(p):
     if p:
-        msg = f"Error de sintaxis en '{p.value}' en la línea {p.lineno}"
-        print(f"[ERROR] {msg}") 
+        error_msg = f"Error de sintaxis en '{p.value}' (tipo {p.type}) en línea {p.lineno}, posición {p.lexpos}"
+        print(error_msg)
+        syntax_errors.append(error_msg)
     else:
-        msg = "Error de sintaxis: Código incompleto o inesperado"
-    syntax_errors.append(msg)
+        error_msg = "Error de sintaxis: Fin de entrada inesperado"
+        print(error_msg)
+        syntax_errors.append(error_msg)
 
 parser = yacc.yacc(debug=False, write_tables=False)
 

@@ -79,5 +79,11 @@ def execute_code(ast, memory=None):
             condition = evaluate_expression(statement[1], memory)
             if condition:
                 output.extend(execute_code(statement[2], memory))
+        
+        elif statement[0] == 'while':
+            condition = evaluate_expression(statement[1],memory)
+            while condition:
+                output.extend(execute_code(statement[2],memory))
+                condition = evaluate_expression(statement[1], memory)
 
     return output
