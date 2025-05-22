@@ -60,9 +60,15 @@ def execute_code(ast, memory=None):
 
     for statement in ast:
         if statement[0] == 'write':
-            msg = statement[1] if isinstance(statement[1], str) else evaluate_expression(statement[1], memory)
-            value = evaluate_expression(statement[2], memory)
-            output.append(f"{msg} {value}")
+           # Manejo de múltiples argumentos en write
+            parts = []
+            for arg in statement[1:]:
+                if isinstance(arg, tuple) and arg[0] == 'string':
+                    parts.append(arg[1].strip('"'))
+                else:
+                    evaluated = evaluate_expression(arg, memory)
+                    parts.append(str(evaluated))
+            output.append(" ".join(parts))
 
         elif statement[0] == 'assign':
             memory[statement[1]] = evaluate_expression(statement[2], memory)
@@ -78,6 +84,27 @@ def execute_code(ast, memory=None):
         elif statement[0] == 'if':
             condition = evaluate_expression(statement[1], memory)
             if condition:
-                output.extend(execute_code(statement[2], memory))
+                new_memory = memory.copy()
+                output.extend(execute_code(statement[2], new_memory))
+
+        elif statement[0] == 'while':
+            condition = evaluate_expression(statement[1], memory)
+            while condition:
+                # Crear un nuevo ámbito para cada iteración
+                iteration_memory = memory.copy()
+                output.extend(execute_code(statement[2], iteration_memory))
+                # Actualizar la memoria principal con los cambios de la iteración
+                for var in iteration_memory:
+                    if var in memory:
+                        memory[var] = iteration_memory[var]
+                condition = evaluate_expression(statement[1], memory)
+                
+        elif statement[0] == 'if-else':
+            condition = evaluate_expression(statement[1], memory)
+            if condition:
+                output.extend(execute_code(statement[2], memory.copy()))
+            else:
+                output.extend(execute_code(statement[3], memory.copy()))
+
 
     return output

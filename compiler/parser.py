@@ -22,6 +22,7 @@ def p_statement(p):
     '''statement : statement_assign
                  | statement_write
                  | statement_capture
+                 | statement_while
                  | statement_if'''
     p[0] = p[1]
 
@@ -32,8 +33,24 @@ def p_statement_assign(p):
 
 # Escritura en pantalla
 def p_statement_write(p):
-    'statement_write : WRITE LPAREN STRING COMMA expression RPAREN DOUBLECOLON'
-    p[0] = ('write', p[3], p[5])
+    '''statement_write : WRITE LPAREN write_args RPAREN DOUBLECOLON'''
+    p[0] = ('write',) + p[3]
+
+def p_statement_while(p):
+    '''statement_while : WHILE LPAREN condition RPAREN statement_list ENDWHILE
+                      | WHILE LPAREN condition RPAREN DOUBLECOLON statement_list ENDWHILE'''
+    if len(p) == 7:  # Sin DOUBLECOLON después del paréntesis
+        p[0] = ('while', p[3], p[5])
+    else:  # Con DOUBLECOLON después del paréntesis
+        p[0] = ('while', p[3], p[6])
+
+def p_write_args(p):
+    '''write_args : write_args COMMA expression
+                  | expression'''
+    if len(p) == 4:
+        p[0] = p[1] + (p[3],)
+    else:
+        p[0] = (p[1],)
 
 # Captura de entrada
 def p_statement_capture(p):
@@ -42,8 +59,12 @@ def p_statement_capture(p):
 
 # Sentencia IF
 def p_statement_if(p):
-    'statement_if : IF LPAREN condition RPAREN THEN statement_list ENDIF'
-    p[0] = ('if', p[3], p[6])
+    '''statement_if : IF LPAREN condition RPAREN THEN statement_list ENDIF
+                   | IF LPAREN condition RPAREN THEN statement_list ELSE statement_list ENDIF'''
+    if len(p) == 8:  # Versión sin ELSE
+        p[0] = ('if', p[3], p[6])
+    else:  # Versión con ELSE (len == 9)
+        p[0] = ('if-else', p[3], p[6], p[8])
 
 # Expresiones aritméticas
 def p_expression_binop(p):
@@ -60,6 +81,10 @@ def p_expression_parens(p):
 def p_expression_number(p):
     'expression : NUMBER'
     p[0] = ('num', p[1])
+
+def p_expression_string(p):
+    'expression : STRING'
+    p[0] = ('string', p[1])
 
 def p_expression_variable(p):
     'expression : VARIABLE'
@@ -92,11 +117,13 @@ def p_condition_group(p):
 # Manejo de errores
 def p_error(p):
     if p:
-        msg = f"Error de sintaxis en '{p.value}' en la línea {p.lineno}"
-        print(f"[ERROR] {msg}") 
+        error_msg = f"Error de sintaxis en '{p.value}' (tipo {p.type}) en línea {p.lineno}, posición {p.lexpos}"
+        print(error_msg)
+        syntax_errors.append(error_msg)
     else:
-        msg = "Error de sintaxis: Código incompleto o inesperado"
-    syntax_errors.append(msg)
+        error_msg = "Error de sintaxis: Fin de entrada inesperado"
+        print(error_msg)
+        syntax_errors.append(error_msg)
 
 parser = yacc.yacc(debug=False, write_tables=False)
 

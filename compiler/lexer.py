@@ -6,10 +6,13 @@ reserved = {
     'capture': 'CAPTURE',
     'if': 'IF',
     'then': 'THEN',
+    'else': 'ELSE',
     'end-if': 'ENDIF',
+    'while':'WHILE',
+    'end-while':'ENDWHILE',
     'and': 'AND',
     'or': 'OR',
-    'not': 'NOT'
+    'not': 'NOT',
 }
 
 # Lista de tokens
@@ -43,9 +46,10 @@ def t_NUMBER(t):
     t.value = int(t.value)
     return t
 
+# Modifica la expresión regular para reconocer 'end-if' como un solo token
 def t_VARIABLE(t):
-    r'[a-zA-Z_][a-zA-Z_0-9]*'
-    t.type = reserved.get(t.value, 'VARIABLE')
+    r'[a-zA-Z_][a-zA-Z_0-9]*(?:-(?!-)[a-zA-Z_][a-zA-Z_0-9]*)*'
+    t.type = reserved.get(t.value.lower(), 'VARIABLE')  # Usa lower() para hacerlo case-insensitive
     return t
 
 t_ignore = ' \t'
