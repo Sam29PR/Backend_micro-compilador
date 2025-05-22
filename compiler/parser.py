@@ -22,6 +22,7 @@ def p_statement(p):
     '''statement : statement_assign
                  | statement_write
                  | statement_capture
+                 | statement_while
                  | statement_if'''
     p[0] = p[1]
 
@@ -36,8 +37,12 @@ def p_statement_write(p):
     p[0] = ('write',) + p[3]
 
 def p_statement_while(p):
-    'statement : WHILE LPAREN condition RPAREN statement_list ENDWHILE'
-    p[0] = ('while', p[3],p[5])
+    '''statement_while : WHILE LPAREN condition RPAREN statement_list ENDWHILE
+                      | WHILE LPAREN condition RPAREN DOUBLECOLON statement_list ENDWHILE'''
+    if len(p) == 7:  # Sin DOUBLECOLON después del paréntesis
+        p[0] = ('while', p[3], p[5])
+    else:  # Con DOUBLECOLON después del paréntesis
+        p[0] = ('while', p[3], p[6])
 
 def p_write_args(p):
     '''write_args : write_args COMMA expression
@@ -54,8 +59,12 @@ def p_statement_capture(p):
 
 # Sentencia IF
 def p_statement_if(p):
-    'statement_if : IF LPAREN condition RPAREN THEN statement_list ENDIF'
-    p[0] = ('if', p[3], p[6])
+    '''statement_if : IF LPAREN condition RPAREN THEN statement_list ENDIF
+                   | IF LPAREN condition RPAREN THEN statement_list ELSE statement_list ENDIF'''
+    if len(p) == 8:  # Versión sin ELSE
+        p[0] = ('if', p[3], p[6])
+    else:  # Versión con ELSE (len == 9)
+        p[0] = ('if-else', p[3], p[6], p[8])
 
 # Expresiones aritméticas
 def p_expression_binop(p):

@@ -6,12 +6,13 @@ reserved = {
     'capture': 'CAPTURE',
     'if': 'IF',
     'then': 'THEN',
+    'else': 'ELSE',
     'end-if': 'ENDIF',
+    'while':'WHILE',
+    'end-while':'ENDWHILE',
     'and': 'AND',
     'or': 'OR',
     'not': 'NOT',
-    'while':'WHILE',
-    'end-while':'ENDWHILE'
 }
 
 # Lista de tokens
